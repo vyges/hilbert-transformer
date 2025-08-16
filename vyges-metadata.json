@@ -6,11 +6,17 @@
   "description": "A fully pipelined digital Hilbert transformer IP block for DSP applications including single sideband modulation, amplitude/phase detection, and quadrature signal processing. Optimized for FPGA and ASIC implementations with configurable precision and maximum throughput.",
   "license": "Apache-2.0",
   "template": "vyges-ip-template@1.0.0",
-  "target": ["asic", "fpga"],
-  "design_type": ["digital", "dsp"],
+  "target": [
+    "asic",
+    "fpga"
+  ],
+  "design_type": [
+    "digital",
+    "dsp"
+  ],
   "maturity": "beta",
-  "created": "2024-01-15T10:30:00Z",
-  "updated": "2024-01-15T10:30:00Z",
+  "created": "2025-08-15T00:00:00Z",
+  "updated": "2025-08-15T00:00:00Z",
   "source": {
     "type": "git",
     "url": "https://github.com/vyges/hilbert-transformer",
@@ -36,9 +42,23 @@
     {
       "type": "clock",
       "direction": "input",
+      "protocol": "Clock",
       "signals": [
-        { "name": "clk_i", "direction": "input", "type": "clock", "description": "System clock" },
-        { "name": "rst_n_i", "direction": "input", "type": "reset", "active_level": "low", "description": "Active-low reset" }
+        {
+          "name": "clk_i",
+          "direction": "input",
+          "type": "clock",
+          "width": 1,
+          "description": "System clock"
+        },
+        {
+          "name": "rst_n_i",
+          "direction": "input",
+          "type": "reset",
+          "width": 1,
+          "active_level": "low",
+          "description": "Active-low reset"
+        }
       ]
     },
     {
@@ -47,9 +67,27 @@
       "protocol": "AXI-Stream",
       "width": 16,
       "signals": [
-        { "name": "tdata_i", "direction": "input", "width": 16, "type": "data", "description": "Input data stream" },
-        { "name": "tvalid_i", "direction": "input", "type": "control", "description": "Input data valid" },
-        { "name": "tready_o", "direction": "output", "type": "control", "description": "Ready to accept input" }
+        {
+          "name": "tdata_i",
+          "direction": "input",
+          "width": 16,
+          "type": "data",
+          "description": "Input data stream"
+        },
+        {
+          "name": "tvalid_i",
+          "direction": "input",
+          "type": "control",
+          "width": 1,
+          "description": "Input data valid"
+        },
+        {
+          "name": "tready_o",
+          "direction": "output",
+          "type": "control",
+          "width": 1,
+          "description": "Ready to accept input"
+        }
       ]
     },
     {
@@ -58,18 +96,55 @@
       "protocol": "AXI-Stream",
       "width": 16,
       "signals": [
-        { "name": "tdata_o", "direction": "output", "width": 16, "type": "data", "description": "Output data stream (Hilbert transformed)" },
-        { "name": "tvalid_o", "direction": "output", "type": "control", "description": "Output data valid" },
-        { "name": "tready_i", "direction": "input", "type": "control", "description": "Downstream ready" }
+        {
+          "name": "tdata_o",
+          "direction": "output",
+          "width": 16,
+          "type": "data",
+          "description": "Output data stream (Hilbert transformed)"
+        },
+        {
+          "name": "tvalid_o",
+          "direction": "output",
+          "type": "control",
+          "width": 1,
+          "description": "Output data valid"
+        },
+        {
+          "name": "tready_i",
+          "direction": "input",
+          "type": "control",
+          "width": 1,
+          "description": "Downstream ready"
+        }
       ]
     },
     {
       "type": "control",
       "direction": "bidirectional",
+      "protocol": "Control",
       "signals": [
-        { "name": "config_valid_i", "direction": "input", "type": "control", "description": "Configuration valid" },
-        { "name": "config_data_i", "direction": "input", "width": 32, "type": "data", "description": "Configuration data" },
-        { "name": "status_o", "direction": "output", "width": 32, "type": "data", "description": "Status information" }
+        {
+          "name": "config_valid_i",
+          "direction": "input",
+          "type": "control",
+          "width": 1,
+          "description": "Configuration valid"
+        },
+        {
+          "name": "config_data_i",
+          "direction": "input",
+          "width": 32,
+          "type": "data",
+          "description": "Configuration data"
+        },
+        {
+          "name": "status_o",
+          "direction": "output",
+          "width": 32,
+          "type": "data",
+          "description": "Status information"
+        }
       ]
     }
   ],
@@ -79,7 +154,10 @@
       "type": "int",
       "default": 16,
       "description": "Data width for input and output streams",
-      "range": { "min": 8, "max": 32 },
+      "range": {
+        "min": 8,
+        "max": 32
+      },
       "units": "bits",
       "required": false
     },
@@ -88,7 +166,10 @@
       "type": "int",
       "default": 64,
       "description": "FIR filter order for Hilbert transform",
-      "range": { "min": 16, "max": 256 },
+      "range": {
+        "min": 16,
+        "max": 256
+      },
       "units": "taps",
       "required": false
     },
@@ -97,7 +178,10 @@
       "type": "int",
       "default": 8,
       "description": "Number of pipeline stages for throughput optimization",
-      "range": { "min": 4, "max": 16 },
+      "range": {
+        "min": 4,
+        "max": 16
+      },
       "units": "stages",
       "required": false
     },
@@ -106,7 +190,10 @@
       "type": "int",
       "default": 18,
       "description": "Width of filter coefficients",
-      "range": { "min": 16, "max": 24 },
+      "range": {
+        "min": 16,
+        "max": 24
+      },
       "units": "bits",
       "required": false
     },
@@ -115,19 +202,40 @@
       "type": "int",
       "default": 32,
       "description": "Width of accumulator for FIR filter",
-      "range": { "min": 16, "max": 48 },
+      "range": {
+        "min": 16,
+        "max": 48
+      },
       "units": "bits",
       "required": false
     }
   ],
+  "categories": {
+    "primary": "signal-processing",
+    "secondary": ["dsp", "filter", "communication"],
+    "tags": ["hilbert", "dsp", "fir", "pipeline", "axi-stream", "fpga", "asic", "communication"]
+  },
+  "community": {
+    "issues": "https://github.com/vyges/hilbert-transformer/issues",
+    "contributions": "https://github.com/vyges/hilbert-transformer/pulls",
+    "chat": "https://github.com/vyges/hilbert-transformer/discussions"
+  },
   "test": {
     "coverage": true,
-    "testbenches": ["cocotb", "systemverilog"],
-    "simulators": ["verilator", "iverilog", "vcs", "xcelium"],
+    "testbenches": [
+      "cocotb",
+      "systemverilog"
+    ],
+    "simulators": [
+      "verilator",
+      "iverilog",
+      "vcs",
+      "xcelium"
+    ],
     "status": "passing",
     "categories": [
       "functional",
-      "performance", 
+      "performance",
       "corner_case",
       "error",
       "coverage",
@@ -152,47 +260,84 @@
     "verilator": {
       "status": "verified",
       "version": "4.0+",
-      "features": ["coverage", "waveforms", "linting"]
+      "features": [
+        "coverage",
+        "waveforms",
+        "linting"
+      ]
     },
     "iverilog": {
       "status": "verified",
       "version": "11.0+",
-      "features": ["simulation", "waveforms"]
+      "features": [
+        "simulation",
+        "waveforms"
+      ]
     },
     "vcs": {
       "status": "verified",
       "version": "2020.03+",
-      "features": ["coverage", "waveforms", "debug"]
+      "features": [
+        "coverage",
+        "waveforms",
+        "debug"
+      ]
     },
     "xcelium": {
       "status": "verified",
       "version": "20.09+",
-      "features": ["coverage", "waveforms", "debug"]
+      "features": [
+        "coverage",
+        "waveforms",
+        "debug"
+      ]
     },
     "openlane": {
-      "pdks": ["sky130B"],
+      "pdks": [
+        "sky130B"
+      ],
       "status": "tested",
       "version": "2.0+",
-      "features": ["synthesis", "placement", "routing"]
+      "features": [
+        "synthesis",
+        "placement",
+        "routing"
+      ]
     },
     "vivado": {
       "status": "verified",
       "version": "2023.1+",
-      "features": ["synthesis", "implementation", "bitstream"]
+      "features": [
+        "synthesis",
+        "implementation",
+        "bitstream"
+      ]
     },
     "yosys": {
       "status": "verified",
       "version": "0.30+",
-      "features": ["synthesis", "optimization"]
+      "features": [
+        "synthesis",
+        "optimization"
+      ]
     }
   },
   "asic": {
     "flavor": "digital",
-    "pdks": ["sky130B", "tsmc28"],
+    "pdks": [
+      "sky130B",
+      "tsmc28"
+    ],
     "synthesis_tool": "openlane",
     "clock_freq_mhz": 500,
-    "constraints": ["constraints.sdc"],
-    "tools": ["yosys", "openroad", "magic"],
+    "constraints": [
+      "constraints.sdc"
+    ],
+    "tools": [
+      "yosys",
+      "openroad",
+      "magic"
+    ],
     "area_mm2": 0.3,
     "power_mw": 5,
     "gate_count": 100000
@@ -202,7 +347,9 @@
     "board": "arty-a7-35",
     "device": "xc7a35ticsg324-1L",
     "cfu_playground_compatible": true,
-    "constraints": ["constraints.xdc"],
+    "constraints": [
+      "constraints.xdc"
+    ],
     "clock_freq_mhz": 200,
     "resources": {
       "lut": 4000,
@@ -340,8 +487,32 @@
   },
   "automation": {
     "automation_level": "enhanced",
-    "minimal_required": ["name", "version", "license", "interfaces", "template", "target", "design_type", "maturity", "description", "source", "asic", "fpga", "test", "flows"],
-    "recommended_for_automation": ["parameters", "dependencies", "toolRequirements", "performance", "reliability", "packaging", "community", "integration"],
+    "minimal_required": [
+      "name",
+      "version",
+      "license",
+      "interfaces",
+      "template",
+      "target",
+      "design_type",
+      "maturity",
+      "description",
+      "source",
+      "asic",
+      "fpga",
+      "test",
+      "flows"
+    ],
+    "recommended_for_automation": [
+      "parameters",
+      "dependencies",
+      "toolRequirements",
+      "performance",
+      "reliability",
+      "packaging",
+      "community",
+      "integration"
+    ],
     "blocking_issues": [],
     "ci_cd": {
       "github_actions": true,
@@ -358,20 +529,12 @@
       "documentation_automation": "Integration documentation generation"
     }
   },
-  "performance": {
-    "throughput": "1 sample per clock cycle",
-    "latency": "8-64 clock cycles (configurable)",
-    "max_frequency": {
-      "fpga": "200 MHz",
-      "asic": "500 MHz"
-    },
-    "power_consumption": {
-      "fpga": "50-200 mW",
-      "asic": "1-10 mW"
-    }
-  },
   "reliability": {
-    "error_detection": ["overflow", "invalid_configuration", "protocol_violations"],
+    "error_detection": [
+      "overflow",
+      "invalid_configuration",
+      "protocol_violations"
+    ],
     "error_recovery": "graceful_degradation",
     "test_coverage": "comprehensive",
     "formal_verification": "planned"
@@ -392,33 +555,21 @@
       "build_system": true
     }
   },
-  "community": {
-    "contributors": ["Vyges Team"],
-    "documentation": "comprehensive",
-    "examples": "multiple",
-    "support": "email_and_discord",
-    "integration_support": {
-      "documentation": "Complete integration guide with examples and tutorials",
-      "examples": "Multiple platform-specific integration examples",
-      "verification": "Comprehensive integration test suite",
-      "support": "Integration-specific support and troubleshooting"
-    }
-  },
   "meta": {
     "template": {
       "generator": "vyges-cli",
-      "init_tool": "vyges-cli", 
+      "init_tool": "vyges-cli",
       "template_version": "1.0.0",
-      "generated_at": "2024-01-15T10:30:00Z"
+      "generated_at": "2025-08-15T00:00:00Z"
     },
     "generated_by": "vyges-cli",
     "schema": {
       "version": "1.0.0",
-      "compatible_versions": ["1.0.0", "1.1.0"],
+      "compatible_versions": [
+        "1.0.0",
+        "1.1.0"
+      ],
       "generated_with": "vyges-cli"
     }
-  },
-  "categories": ["dsp", "filter", "communication", "signal_processing"],
-  "tags": ["hilbert", "dsp", "fir", "pipeline", "axi-stream", "fpga", "asic", "communication"],
-  "keywords": ["hilbert transform", "dsp", "fir filter", "communication", "modulation", "quadrature", "single sideband", "signal processing", "digital filter"]
-} 
+  }
+}
